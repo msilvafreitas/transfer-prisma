@@ -2,30 +2,34 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id       Int     @id @default(autoincrement())
-  content  String?
-  title    String
-  authorId Int?
-  author   User?   @relation(fields: [authorId], references: [id])
+model Position {
+  id        String @id @default(uuid())
+  title     String
+  bannerUrl String
+  players   Player[]
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  userId Int
-  user   User    @relation(fields: [userId], references: [id])
+model Player {
+  id        String @id @default(uuid())
+  positionId String
+  name      String
+  age       Int
+  discord   String
+  current   Int
+  potential Int
+  accdev    Boolean
+  delaydec  Boolean
+  createdAt DateTime @default(now())
+
+  position Position @relation(fields: [positionId], references: [id])
 }
 
-model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String?
-  posts    Post[]
-  profiles Profile[]
-}
+
+
+
